@@ -60,12 +60,12 @@ const BlockModelList = [
 ];
 
 class Block {
-  private _key;
-  private _shape;
-  private _source;
-  private _x;
-  private _y;
-  private _rotateIdx;
+  private _key; // 方块的类别
+  private _shape; // 对应形状
+  private _source; // 源点
+  private _x; // 对应在矩阵的x , 也就是列
+  private _y; // 对应在矩阵的y , 也就是行
+  private _rotateIdx; // 旋转到第几次了
 
   public get key() {
     return this._key;

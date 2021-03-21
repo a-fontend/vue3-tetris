@@ -2,16 +2,16 @@ import Block from "@/Model/Block";
 import { ElMessage } from "element-plus";
 
 class Game {
-  private _state: string;
-  private _width: number;
-  private _height: number;
-  private _cellSize: number;
-  private _paddingSize: number;
-  private _matrix: number[][];
-  private _curBlock: Block;
-  private _nextBlock: Block;
-  private _downInterval?: NodeJS.Timeout;
-  private _speed: number;
+  private _state: string; // 游戏状态
+  private _width: number; // 宽度格子数
+  private _height: number; // 高度上的格子数
+  private _cellSize: number; // 单元格的大小
+  private _paddingSize: number; // padding 尺寸
+  private _matrix: number[][]; // 矩阵数据
+  private _curBlock: Block; // 当前在移动的方块
+  private _nextBlock: Block; // 下一次的方块
+  private _downInterval?: NodeJS.Timeout; // 自动下落的计时器的 time
+  private _speed: number; // 下落速度，也就是 setTimeout 的延时
 
   public get state(): string {
     return this._state;
