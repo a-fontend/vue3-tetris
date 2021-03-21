@@ -231,10 +231,16 @@ class Game {
     const { shape, x, y } = curBlock;
     const newMatrix: number[][] = JSON.parse(JSON.stringify(matrix));
     const clearArr = this.clearLine(matrix);
-    newMatrix.forEach((row) => {
-      row.forEach((val, colIdx, arr) => {
+    let idx = 0;
+    newMatrix.some((row) => {
+      row.some((val, colIdx, arr) => {
         if (val === 1) {
           arr[colIdx] = 0;
+          idx++;
+        }
+        // 如果已经清除了 4 个就跳出
+        if (idx >= 4) {
+          return true;
         }
       });
     });
@@ -287,13 +293,9 @@ class Game {
   }
 
   // 一个方块结束, 触发下一个
-  private nextAround(matrix: number[][], stopDownTrigger?: VoidFunction) {
+  private nextAround(matrix: number[][]) {
     clearTimeout(this._downInterval as NodeJS.Timeout);
     this._matrix = matrix;
-    if (stopDownTrigger) {
-      stopDownTrigger();
-    }
-
     setTimeout(() => {
       this._curBlock = this._nextBlock;
       this._nextBlock = Block.prototype.randomRenderBlock();
