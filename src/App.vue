@@ -1,27 +1,110 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="app">
+    <Scene
+      :widthNum="game.width"
+      :heightNum="game.height"
+      :cellSize="game.cellSize"
+      :paddingSize="game.paddingSize"
+      :matrix="game.matrix"
+      :curBlock="game.curBlock"
+      :keyRefresh="keyRefresh"
+    />
+    <Menu
+      :state="game.state"
+      :keySpace="keySpace"
+      :keyUp="keyUp"
+      :keyDown="keyDown"
+      :keyLeft="keyLeft"
+      :keyRight="keyRight"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { defineComponent, onMounted, reactive } from "vue";
+import Scene from "./components/Scene.vue";
+import Menu from "./components/Menu.vue";
+import GameClass from "@/Model/Game";
+import EventClass from "@/Model/Event";
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    Scene,
+    Menu,
+  },
+  setup() {
+    let game = reactive<GameClass>(
+      new GameClass("over", 10, 20, 20, 2)
+    ) as GameClass;
+    const event = reactive<EventClass>(new EventClass());
+
+    const keySpace = () => {
+      event.key_space(game);
+    };
+    const keyDown = () => {
+      event.key_down(game);
+    };
+    const keyUp = () => {
+      event.key_up(game);
+    };
+    const keyLeft = () => {
+      event.key_left(game);
+    };
+    const keyRight = () => {
+      event.key_right(game);
+    };
+    const keyRefresh = () => {
+      event.key_refresh(game);
+    };
+
+    onMounted(() => {
+      window.addEventListener("keydown", (e) => {
+        // console.log(e);
+        switch (e.code) {
+          case "Space":
+            keySpace();
+            return;
+          case "ArrowUp":
+            keyUp();
+            return;
+          case "ArrowLeft":
+            keyLeft();
+            return;
+          case "ArrowRight":
+            keyRight();
+            return;
+          case "ArrowDown":
+            keyDown();
+            return;
+          case "KeyR":
+            keyRefresh();
+            return;
+        }
+      });
+    });
+
+    return {
+      game,
+      keySpace,
+      keyDown,
+      keyUp,
+      keyLeft,
+      keyRight,
+      keyRefresh,
+    };
   },
 });
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app {
+  width: 300px;
+  height: 500px;
 }
 </style>
