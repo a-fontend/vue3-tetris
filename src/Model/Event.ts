@@ -10,7 +10,7 @@ import Game from "./Game";
 class Event {
   public keyEvents(type: string, game: Game) {
     // 阻止非游戏状态下的操作
-    if (type !== "Space" && game.state !== "start") {
+    if (type !== "Space" && game.state !== "start" && type !== "KeyR") {
       return;
     }
     if (navigator.vibrate) {
@@ -26,18 +26,22 @@ class Event {
         return;
 
       case "ArrowLeft":
+      case "KeyA":
         game.b_move("left");
         return;
 
       case "ArrowRight":
+      case "KeyD":
         game.b_move("right");
         return;
 
       case "ArrowUp":
+      case "KeyW":
         game.b_move("rotate");
         return;
 
       case "ArrowDown":
+      case "KeyS":
         game.b_down();
         return;
 

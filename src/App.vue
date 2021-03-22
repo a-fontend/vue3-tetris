@@ -32,18 +32,26 @@ export default defineComponent({
   },
   setup() {
     const heightNum = ref(24);
+    const widthNum = ref(12);
     const offsetWidth = document.documentElement.clientWidth;
     if (offsetWidth >= 1200) {
       document.documentElement.style.fontSize = 14 + "px";
       heightNum.value = 20;
     }
-    if (offsetWidth <= 375) {
+    // 以 plus 为断点
+    if (offsetWidth <= 500 && offsetWidth >= 340) {
       document.documentElement.style.fontSize = 10 + "px";
-      heightNum.value = 24;
+    }
+
+    // 如果真的还有人在用 iphone5 的话
+    if (offsetWidth <= 340) {
+      document.documentElement.style.fontSize = 10 + "px";
+      heightNum.value = 16;
+      widthNum.value = 8;
     }
 
     const game = reactive<GameClass>(
-      new GameClass("over", 12, heightNum.value, 2, 2)
+      new GameClass("over", widthNum.value, heightNum.value, 2, 2)
     ) as GameClass;
 
     const eventInstance = new EventClass();
