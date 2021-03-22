@@ -8,42 +8,42 @@
         plain
         :icon="state === 'start' ? 'el-icon-video-pause' : 'el-icon-video-play'"
         style="transform: scale(2)"
-        @click="keySpace()"
+        @click="keyEvents('Space')"
       />
     </div>
     <div class="right">
       <div class="up_btn">
         <el-button
-          size="small"
+          size="medium"
           icon="el-icon-caret-top"
           type="primary"
           circle
-          @click="keyUp()"
+          @click="keyEvents('ArrowUp')"
         />
       </div>
       <div class="left_right_btns">
         <el-button
-          size="small"
+          size="medium"
           icon="el-icon-caret-left"
           type="primary"
           circle
-          @click="keyLeft()"
+          @click="keyEvents('ArrowLeft')"
         />
         <el-button
-          size="small"
+          size="medium"
           icon="el-icon-caret-right"
           type="primary"
           circle
-          @click="keyRight()"
+          @click="keyEvents('ArrowRight')"
         />
       </div>
       <div class="down_btn">
         <el-button
-          size="small"
+          size="medium"
           icon="el-icon-caret-bottom"
           type="primary"
           circle
-          @click="keyDown()"
+          @click="keyEvents('ArrowDown')"
         />
       </div>
     </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
@@ -59,38 +59,21 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    keySpace: {
+    keyEvents: {
       type: Function,
+      required: true,
     },
-    keyUp: {
-      type: Function,
-    },
-    keyDown: {
-      type: Function,
-    },
-    keyLeft: {
-      type: Function,
-    },
-    keyRight: {
-      type: Function,
-    },
-  },
-  setup(props) {
-    onMounted(() => {
-      console.log(props);
-    });
   },
 });
 </script>
 <style lang="less" scoped>
 .menu-container {
-  height: 100px;
   border: 3px solid #67c23a;
   border-top: none;
   background: #e1f3d8;
   display: flex;
   justify-content: center;
-
+  flex-grow: 1;
   .left {
     width: 50%;
     display: flex;
@@ -103,6 +86,7 @@ export default defineComponent({
     width: 50%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 
     .up_btn,

@@ -16,7 +16,7 @@
         />
       </el-row>
     </div>
-    <div class="controller">
+    <div class="controller" :style="{ width: 5 * cellSize + 'rem' }">
       <div class="refresh-btn">
         <el-button
           type="danger"
@@ -37,7 +37,7 @@
           <Cell
             v-for="(col, colIdx) in rowItem"
             :key="colIdx"
-            :size="cellSize - 5"
+            :size="cellSize - 0.5"
             :paddingSize="paddingSize"
             :value="col"
           />
@@ -118,7 +118,6 @@ export default defineComponent({
   background-color: #e1f3d8;
   display: flex;
   .controller {
-    flex-grow: 1;
     display: flex;
     padding: 20px 5px;
     font-size: 14px;

@@ -1,5 +1,8 @@
 <template>
-  <div class="app">
+  <div
+    class="container"
+    :style="{ width: `${(game.width + 6) * game.cellSize}rem` }"
+  >
     <Scene
       :widthNum="game.width"
       :heightNum="game.height"
@@ -10,19 +13,12 @@
       :keyRefresh="keyRefresh"
       :score="game.score"
     />
-    <Menu
-      :state="game.state"
-      :keySpace="keySpace"
-      :keyUp="keyUp"
-      :keyDown="keyDown"
-      :keyLeft="keyLeft"
-      :keyRight="keyRight"
-    />
+    <Menu :state="game.state" :keyEvents="keyMobile" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
+import { defineComponent, onMounted, onUnmounted, reactive, ref } from "vue";
 import Scene from "./components/Scene.vue";
 import Menu from "./components/Menu.vue";
 import GameClass from "@/Model/Game";
@@ -35,52 +31,31 @@ export default defineComponent({
     Menu,
   },
   setup() {
+    const heightNum = ref(24);
+    const offsetWidth = document.documentElement.clientWidth;
+    if (offsetWidth >= 1200) {
+      document.documentElement.style.fontSize = 14 + "px";
+      heightNum.value = 20;
+    }
+    if (offsetWidth <= 375) {
+      document.documentElement.style.fontSize = 10 + "px";
+      heightNum.value = 24;
+    }
+
     const game = reactive<GameClass>(
-      new GameClass("over", 10, 20, 20, 2)
+      new GameClass("over", 12, heightNum.value, 2, 2)
     ) as GameClass;
 
-    const event = new EventClass();
-
-    const keySpace = () => {
-      event.key_space(game);
-    };
-    const keyDown = () => {
-      event.key_down(game);
-    };
-    const keyUp = () => {
-      event.key_up(game);
-    };
-    const keyLeft = () => {
-      event.key_left(game);
-    };
-    const keyRight = () => {
-      event.key_right(game);
-    };
-    const keyRefresh = () => {
-      event.key_refresh(game);
-    };
+    const eventInstance = new EventClass();
 
     const keyEvents = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          keySpace();
-          return;
-        case "ArrowUp":
-          keyUp();
-          return;
-        case "ArrowLeft":
-          keyLeft();
-          return;
-        case "ArrowRight":
-          keyRight();
-          return;
-        case "ArrowDown":
-          keyDown();
-          return;
-        case "KeyR":
-          keyRefresh();
-          return;
-      }
+      eventInstance.keyEvents(e.code, game);
+    };
+    const keyMobile = (type: string) => {
+      eventInstance.keyEvents(type, game);
+    };
+    const keyRefresh = () => {
+      eventInstance.keyEvents("KeyR", game);
     };
 
     onMounted(() => {
@@ -93,11 +68,8 @@ export default defineComponent({
 
     return {
       game,
-      keySpace,
-      keyDown,
-      keyUp,
-      keyLeft,
-      keyRight,
+      keyEvents,
+      keyMobile,
       keyRefresh,
     };
   },
@@ -105,12 +77,24 @@ export default defineComponent({
 </script>
 
 <style>
+html,
+body {
+  font-size: 14px;
+  width: 100%;
+  height: 100%;
+}
 #app {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.app {
-  height: 500px;
+
+.container {
+  height: 100%;
+  /* height: 35rem; */
+  display: flex;
+  flex-flow: column nowrap;
 }
 </style>

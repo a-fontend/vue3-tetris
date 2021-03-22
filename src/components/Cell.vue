@@ -2,8 +2,8 @@
   <div
     :class="value === 0 ? 'block' : 'block-active'"
     :style="{
-      width: `${size}px`,
-      height: `${size}px`,
+      width: `${size}rem`,
+      height: `${size}rem`,
       padding: `${paddingSize}px`,
     }"
   >

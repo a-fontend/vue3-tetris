@@ -28,6 +28,16 @@ const BlockModelList = [
     y: 4,
   },
   {
+    key: "J",
+    shape: [
+      [0, 0, 1],
+      [1, 1, 1],
+    ],
+    source: [[0, 0]],
+    x: -1,
+    y: 4,
+  },
+  {
     key: "O",
     shape: [
       [1, 1],

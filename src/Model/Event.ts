@@ -1,38 +1,50 @@
 import Game from "./Game";
 
+// export type keyType =
+//   | "Space"
+//   | "ArrowUp"
+//   | "ArrowDown"
+//   | "ArrowLeft"
+//   | "ArrowRight"
+//   | "KeyR"
 class Event {
-  // 空格事件
-  public key_space(game: Game) {
-    if (game.state === "over" || game.state === "pause") {
-      game.start();
-    } else if (game.state === "start") {
-      game.pause();
+  public keyEvents(type: string, game: Game) {
+    // 阻止非游戏状态下的操作
+    if (type !== "Space" && game.state !== "start") {
+      return;
     }
-  }
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+    switch (type) {
+      case "Space":
+        if (game.state === "over" || game.state === "pause") {
+          game.start();
+        } else if (game.state === "start") {
+          game.pause();
+        }
+        return;
 
-  // 左移事件
-  public key_left(game: Game) {
-    game.b_move("left");
-  }
+      case "ArrowLeft":
+        game.b_move("left");
+        return;
 
-  // 右移事件
-  public key_right(game: Game) {
-    game.b_move("right");
-  }
+      case "ArrowRight":
+        game.b_move("right");
+        return;
 
-  // 旋转
-  public key_up(game: Game) {
-    game.b_move("rotate");
-  }
+      case "ArrowUp":
+        game.b_move("rotate");
+        return;
 
-  // 加速下落
-  public key_down(game: Game) {
-    game.b_down();
-  }
+      case "ArrowDown":
+        game.b_down();
+        return;
 
-  // 刷新
-  public key_refresh(game: Game) {
-    game.refresh();
+      case "KeyR":
+        game.refresh();
+        return;
+    }
   }
 }
 

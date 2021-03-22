@@ -139,10 +139,6 @@ class Game {
   public refresh() {
     clearTimeout(this._downInterval as NodeJS.Timeout);
     this._state = "over";
-    this._height = 20;
-    this._width = 10;
-    this._cellSize = 20;
-    this._paddingSize = 2;
     this._score = 0;
     this._matrix = this.renderDefaultMatrix();
     this._curBlock = Block.prototype.randomRenderBlock();
