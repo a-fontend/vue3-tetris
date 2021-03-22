@@ -6,8 +6,9 @@
       :cellSize="game.cellSize"
       :paddingSize="game.paddingSize"
       :matrix="game.matrix"
-      :curBlock="game.curBlock"
+      :nextBlock="game.nextBlock"
       :keyRefresh="keyRefresh"
+      :score="game.score"
     />
     <Menu
       :state="game.state"
@@ -21,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from "vue";
+import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
 import Scene from "./components/Scene.vue";
 import Menu from "./components/Menu.vue";
 import GameClass from "@/Model/Game";
@@ -34,10 +35,11 @@ export default defineComponent({
     Menu,
   },
   setup() {
-    let game = reactive<GameClass>(
+    const game = reactive<GameClass>(
       new GameClass("over", 10, 20, 20, 2)
     ) as GameClass;
-    const event = reactive<EventClass>(new EventClass());
+
+    const event = new EventClass();
 
     const keySpace = () => {
       event.key_space(game);
@@ -58,30 +60,35 @@ export default defineComponent({
       event.key_refresh(game);
     };
 
+    const keyEvents = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case "Space":
+          keySpace();
+          return;
+        case "ArrowUp":
+          keyUp();
+          return;
+        case "ArrowLeft":
+          keyLeft();
+          return;
+        case "ArrowRight":
+          keyRight();
+          return;
+        case "ArrowDown":
+          keyDown();
+          return;
+        case "KeyR":
+          keyRefresh();
+          return;
+      }
+    };
+
     onMounted(() => {
-      window.addEventListener("keydown", (e) => {
-        // console.log(e);
-        switch (e.code) {
-          case "Space":
-            keySpace();
-            return;
-          case "ArrowUp":
-            keyUp();
-            return;
-          case "ArrowLeft":
-            keyLeft();
-            return;
-          case "ArrowRight":
-            keyRight();
-            return;
-          case "ArrowDown":
-            keyDown();
-            return;
-          case "KeyR":
-            keyRefresh();
-            return;
-        }
-      });
+      window.addEventListener("keydown", keyEvents);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("keydown", keyEvents);
     });
 
     return {
@@ -104,7 +111,6 @@ export default defineComponent({
   align-items: center;
 }
 .app {
-  width: 300px;
   height: 500px;
 }
 </style>

@@ -2,7 +2,7 @@ import Block from "@/Model/Block";
 import { ElMessage } from "element-plus";
 
 class Game {
-  private _state: string; // 游戏状态
+  private _state: "start" | "pause" | "over"; // 游戏状态
   private _width: number; // 宽度格子数
   private _height: number; // 高度上的格子数
   private _cellSize: number; // 单元格的大小
@@ -12,14 +12,14 @@ class Game {
   private _nextBlock: Block; // 下一次的方块
   private _downInterval?: NodeJS.Timeout; // 自动下落的计时器的 time
   private _speed: number; // 下落速度，也就是 setTimeout 的延时
+  private _score: number; //分数统计
 
-  public get state(): string {
+  public get state(): "start" | "pause" | "over" {
     return this._state;
   }
-  public set state(value: string) {
+  public set state(value: "start" | "pause" | "over") {
     this._state = value;
   }
-
   public get width(): number {
     return this._width;
   }
@@ -73,14 +73,21 @@ class Game {
   public set speed(value: number) {
     this._speed = value;
   }
+  public get score(): number {
+    return this._score;
+  }
+  public set score(value: number) {
+    this._score = value;
+  }
 
   constructor(
-    state = "over",
+    state: "over" | "start" | "pause",
     width = 10,
     height = 20,
     cellSize = 20,
     paddingSize = 2,
     speed = 500,
+    score = 0,
     downInterval = undefined
   ) {
     this._state = state;
@@ -88,15 +95,12 @@ class Game {
     this._width = width;
     this._cellSize = cellSize;
     this._paddingSize = paddingSize;
-    const defaultMatrix: number[][] = [[]];
-    for (let i = 0; i < height; i++) {
-      defaultMatrix[i] = new Array(width).fill(0);
-    }
-    this._matrix = defaultMatrix;
+    this._matrix = this.renderDefaultMatrix();
     this._curBlock = Block.prototype.randomRenderBlock();
     this._nextBlock = Block.prototype.randomRenderBlock();
     this._speed = speed;
     this._downInterval = downInterval;
+    this._score = score;
   }
 
   // 游戏结束判断
@@ -115,6 +119,12 @@ class Game {
 
   // 游戏开始
   public start() {
+    // 这里是因为，constructor 直接时调用两次 random
+    // Math.random 时间戳种子伪随机，然后每次初始化都会出两个一个样的
+    if (this._state === "over") {
+      this._curBlock = this._nextBlock;
+      this._nextBlock = Block.prototype.randomRenderBlock();
+    }
     this._state = "start";
     this.autoDown();
   }
@@ -133,11 +143,8 @@ class Game {
     this._width = 10;
     this._cellSize = 20;
     this._paddingSize = 2;
-    const defaultMatrix: number[][] = [[]];
-    for (let i = 0; i < this._height; i++) {
-      defaultMatrix[i] = new Array(this._width).fill(0);
-    }
-    this._matrix = defaultMatrix;
+    this._score = 0;
+    this._matrix = this.renderDefaultMatrix();
     this._curBlock = Block.prototype.randomRenderBlock();
     this._nextBlock = Block.prototype.randomRenderBlock();
     this._speed = 500;
@@ -215,6 +222,9 @@ class Game {
     });
 
     if (clearArr.length > 0) {
+      // 如果可以清除，那就同时也更新分数
+      // 加一的操作就是, 如果同时清了很多行，分数也多加一点
+      this.computedScore(clearArr.length * (this._width + 1) - 1);
       const newMatrix = JSON.parse(JSON.stringify(matrix));
       clearArr.forEach((rowIdx) => {
         newMatrix.splice(rowIdx, 1);
@@ -226,7 +236,17 @@ class Game {
     return;
   }
 
+  // 渲染默认矩阵, 也就是空白矩阵
+  private renderDefaultMatrix(): number[][] {
+    const defaultMatrix: number[][] = [[]];
+    for (let i = 0; i < this._height; i++) {
+      defaultMatrix[i] = new Array(this._width).fill(0);
+    }
+    return defaultMatrix;
+  }
+
   // 渲染最新的矩阵
+  // 触底的方块在矩阵中值设为 2 和移动中的方块进行区分
   private renderNewMatrix(curBlock: Block, matrix: number[][], data: number) {
     const { shape, x, y } = curBlock;
     const newMatrix: number[][] = JSON.parse(JSON.stringify(matrix));
@@ -301,6 +321,11 @@ class Game {
       this._nextBlock = Block.prototype.randomRenderBlock();
       this.autoDown();
     }, 100);
+  }
+
+  // 更新分数
+  private computedScore(n: number) {
+    this._score = this._score + n;
   }
 }
 
