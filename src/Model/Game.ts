@@ -171,7 +171,7 @@ class Game {
   // 下一位置是否合法
   public canNext(nextBlock: Block): boolean {
     const { x, y, shape } = nextBlock;
-    // 最长的那条基准线的长度
+    // 方块的宽度
     const baseLineLen = shape[0].length;
     return shape.every((row, rowIdx) =>
       row.every((val, colIdx) => {
@@ -271,8 +271,7 @@ class Game {
         }
       })
     );
-    const canClearLine = this.clearLine(newMatrix);
-    return canClearLine ? canClearLine : newMatrix;
+    return newMatrix;
   }
 
   // 方块自动下落
@@ -296,12 +295,14 @@ class Game {
         this._downInterval = setTimeout(downWithTimeout, this._speed);
       } else {
         // 否则则触底
+        // 触底的时候检查能否消除行
         const newMatrix: number[][] = this.renderNewMatrix(
           this._curBlock,
           this._matrix,
           2
         );
-        this.nextAround(newMatrix);
+        const canClearLine = this.clearLine(newMatrix);
+        this.nextAround(canClearLine ? canClearLine : newMatrix);
       }
     };
     clearTimeout(this._downInterval as NodeJS.Timeout);
