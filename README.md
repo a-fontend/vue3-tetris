@@ -15,11 +15,6 @@ npm run build
 npm run lint
 ```
 
-### 在线预览地址
-
-[tetris_demo](http://kianakaslana.club:8085/)
-如果使用电脑调试大小记得重新刷新
-
 ### 思路阐述
 
 ##### 基本数据结构
