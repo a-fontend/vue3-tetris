@@ -1,4 +1,4 @@
-# shopee_tetris
+# Vue3 - Tetris
 
 ### Script
 ```
