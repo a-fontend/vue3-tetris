@@ -2,33 +2,33 @@
 
 ### Script
 ```
-# 初始化
+# Init
 npm install
 
-# 开发预览
+# Dev preivew
 npm run dev
 
-# 打包
+# build
 npm run build
 
-# 语法校验
+# lint
 npm run lint
 ```
 
-### 思路阐述
+### Summary
 
-##### 基本数据结构
-1. Block 类生成方块，并控制方块移动
-2. Game 类渲染视图，限制方块移动，记录游戏状态
-3. Event 类生成方法调用 Game 类的相关方法
+##### Baiscal Classes
+1. BlockClass: Generate Block and controll block
+2. GameClass Render view, limit blocks，record games-info
+3. EventClass: Disptach event to GameClass
 
-##### vue组件功能
-1. Cell 组件就是小单元格，组合起来渲染场景
-2. Menu 组件下方的按钮操作，给移动端按的
-3. Scene 组件显示整体场景
+##### Vue Components
+1. Cell
+2. Menu
+3. Scene
 
-##### 如何关联
-主要是使用了 vue3 的 reactive API，创建一个响应式的 game 对象，调用暴露出来的方法之后，game对象更改自身的属性，然后vue劫持到了game 属性的更改，进行自动更新视图。
+##### How to connect class with vue-component
+Use vue3's reactive API，create reactive game-obj，vue-component will watch when game-obj updated 
 
 
 
