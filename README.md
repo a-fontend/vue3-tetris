@@ -3,16 +3,16 @@
 ### Script
 ```
 # Init
-npm install
+yarn
 
 # Dev preivew
-npm run dev
+yarn dev
 
 # build
-npm run build
+yarn build
 
 # lint
-npm run lint
+yarn lint
 ```
 
 ### Summary
