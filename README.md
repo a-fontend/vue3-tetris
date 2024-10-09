@@ -1,7 +1,7 @@
 # Vue3 - Tetris
 
 ### Demo
-https://little-frontend.github.io/vue3-tetris/
+https://navelorange1999.github.io/vue3-tetris/
 
 ### Script
 ```
