@@ -1,6 +1,7 @@
 {
   "name": "vue3-tetris",
   "version": "0.1.0",
+  "author": "navelorange1999",
   "private": true,
   "scripts": {
     "dev": "vite serve",
